@@ -1,5 +1,5 @@
 ---
-title: "Warm-up mini-Report: Opioid use in Cancer Patients"
+title: "Opioid use in Cancer Patients"
 author: "Matthew Siddoway"
 date: "`r Sys.Date()`"
 output:
