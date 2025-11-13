@@ -13,7 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 # ABSTRACT
 
 # BACKGROUND
-
+Effective pain management in cancer patients remains a critical challenge, as individuals often exhibit substantial variability in their responses to opioid therapy. This variability can result from a combination of physiological, environmental, and genetic factors that influence both opioid metabolism and receptor function. Recent pharmacogenetic studies have emphasized the role of single nucleotide polymorphisms (SNPs) in genes associated with opioid signaling pathways in determining the efficacy and dosage requirements of pain treatment.
+One influential study by Galvan et al. (2011) identified multiple genetic loci that modulate opioid therapy response in cancer patients across Europe. Their findings indicated that variants such as rs12948783 were significantly associated with differences in pain relief and opioid dose requirements, suggesting that specific genetic profiles can affect a patient’s analgesic sensitivity. These results highlight the importance of integrating genetic screening into clinical pain management to optimize therapeutic outcomes and minimize adverse effects.
+Based on this evidence, the present study seeks to investigate how genetic and phenotypic factors influence pain management outcomes among European cancer patients treated with opioids. Specifically, we hypothesize that genetic variation at the rs12948783 locus, along with phenotypic variables such as sex and country, significantly affect normalized pain relief. We predict that carriers of the minor allele (AG or GG genotypes) will experience greater pain relief compared to AA homozygotes, reflecting enhanced opioid responsiveness.
+Understanding these genetic and demographic determinants of opioid efficacy may provide valuable insights for the development of personalized pain management strategies, ultimately improving quality of life for cancer patients undergoing treatment.
 # STUDY QUESTION and HYPOTHESIS
 
 ## Questions  
@@ -26,31 +29,82 @@ I predict that there will be certain phenotypes and genetics that correspond to 
 
 # METHODS
 ```{r}
-
+library(readr)
 library(ggplot2)
-data <- read.csv("Opioid dataset.csv")
-str(data)
 
-model <- lm(percent_pain_relief ~ daily_dose_mg_ME + age + sex +
-               rs12211463_minor_allele_count +
-               rs13421094_minor_allele_count +
-               rs10413396_minor_allele_count,
-             data = data)
+data <- read_csv("epos_style_rs12948783_simulated_large.csv")
 
+data$genotype <- as.factor(data$genotype)
+data$sex <- as.factor(data$sex)
+data$country <- as.factor(data$country)
+
+sample_size <- min(5000, nrow(data))
+
+model_data <- data[sample(nrow(data), sample_size), ]
+model <- lm(norm_pain_relief ~ genotype + sex + country, data = model_data)
 summary(model)
 
+plot_data <- data[sample(nrow(data), sample_size), ]
 
-ggplot(data, aes(x = daily_dose_mg_ME, y = percent_pain_relief, color = sex)) +
-  geom_point(alpha = 0.7) +
-  geom_smooth(method = "lm", se = TRUE, color = "black") +
+ggplot(plot_data, aes(x = genotype, y = norm_pain_relief, fill = genotype)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.15, alpha = 0.4) +
   labs(
-    title = "Relationship Between Opioid Dose and Pain Relief",
-    subtitle = "Simulated data based on Galvan et al. (2011)",
-    x = "Daily Dose (Morphine Equivalent, mg)",
-    y = "Percent Pain Relief"
+    title = "Effect of Genotype on Normalized Pain Relief",
+    x = "Genotype (rs12948783)",
+    y = "Normalized Pain Relief (%)"
   ) +
-  theme_minimal() +
-  theme(plot.title = element_text(face = "bold"))
+  theme_minimal()
+```
+
+
+```{r}
+
+suppressPackageStartupMessages({ library(readr); library(dplyr); library(ggplot2) })
+
+
+dat <- read_csv("epos_style_rs12948783_simulated_large.csv")
+names(dat) <- make.names(trimws(names(dat)), unique = TRUE)
+
+stopifnot(all(c("genotype","norm_pain_relief","carrier") %in% names(dat)))
+dat$genotype <- as.factor(dat$genotype)
+dat$carrier  <- as.factor(dat$carrier)
+dat$pain     <- suppressWarnings(as.numeric(dat$norm_pain_relief))
+dat <- dat[is.finite(dat$pain), , drop = FALSE]
+
+summ <- dat %>%
+  dplyr::group_by(genotype, carrier) %>%
+  dplyr::summarise(
+    n  = dplyr::n(),
+    mn = mean(pain, na.rm = TRUE),
+    sd = sd(pain,   na.rm = TRUE),
+    se = ifelse(n > 1, sd / sqrt(n), 0),
+    .groups = "drop"
+  )
+
+geno_order <- summ %>%
+  dplyr::group_by(genotype) %>%
+  dplyr::summarise(overall = mean(mn, na.rm = TRUE), .groups = "drop") %>%
+  dplyr::arrange(dplyr::desc(overall)) %>%
+  dplyr::pull(genotype) %>%
+  as.character()
+summ$genotype <- factor(summ$genotype, levels = geno_order)
+
+dodge_w <- 0.75
+p <- ggplot(summ, aes(x = genotype, y = mn, fill = carrier)) +
+  geom_col(position = position_dodge(width = dodge_w), width = 0.7) +
+  geom_errorbar(aes(ymin = mn - se, ymax = mn + se),
+                position = position_dodge(width = dodge_w), width = 0.15) +
+  geom_text(aes(label = paste0("n=", n), y = mn + se),
+            position = position_dodge(width = dodge_w),
+            vjust = -0.4, size = 3) +
+  labs(
+    title = "Normalized pain relief (mean ± SE) by genotype and carrier",
+    x = "Genotype", y = "Mean normalized pain relief", fill = "Carrier"
+  ) +
+  theme_minimal()
+print(p)
+
 ```
 ## Barplots
 
@@ -72,7 +126,7 @@ ggplot(data, aes(x = daily_dose_mg_ME, y = percent_pain_relief, color = sex)) +
 
 # REFERENCES     
 
-1. Komar N, Langevin S, Hinten S, Nemeth N, Edwards E, Hettler D, Davis B, Bowen R, Bunning M. Experimental infection of North American birds with the New York 1999 strain of West Nile virus. Emerg Infect Dis. 2003 Mar;9(3):311-22. https://doi.org/10.3201/eid0903.020628
+Galvan, A., Skorpen, F., Klepstad, P., Fragoso, M., Ando, M., Nilsen, T., ... & Ciotti, P. (2011). Multiple loci modulate opioid therapy response for cancer pain. Clinical Cancer Research, 17(13), 4581–4587. https://doi.org/10.1158/1078-0432.CCR-10-3407
 
 2. ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions such as plot() and to correct syntax errors. Accessed `r Sys.Date()`.
 
