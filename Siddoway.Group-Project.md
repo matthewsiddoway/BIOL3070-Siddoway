@@ -1,35 +1,41 @@
-Opioid use in Cancer Patients
+Opioid use in European Cancer Patients
 ================
 Matthew Siddoway
-2025-11-22
+2025-12-06
 
 - [ABSTRACT](#abstract)
 - [BACKGROUND](#background)
   - [Questions](#questions)
   - [Hypothesis](#hypothesis)
+  - [Prediction](#prediction)
 - [METHODS](#methods)
 - [DISCUSSION](#discussion)
   - [Interpretation of boxplot](#interpretation-of-boxplot)
+  - [Interpretation of the linear
+    model](#interpretation-of-the-linear-model)
   - [Interpretation of the barplot](#interpretation-of-the-barplot)
 - [CONCLUSION](#conclusion)
+  - [Limitations](#limitations)
 - [REFERENCES](#references)
 
 # ABSTRACT
 
 Opioid responsiveness varies widely among cancer patients, and growing
-evidence suggests that genetic and phenotypic factors contribute to
-differences in analgesic efficacy (Baldwin et al., 2012; Klepstad et
-al., 2011). This study investigates whether variation at the rs12948783
-genetic locus—as well as phenotypic variables such as sex and country of
+evidence suggests that genetic factors contribute to differences in
+analgesic efficacy (Galvan et al., 2011; Klepstad et al., 2011). This
+study investigates whether variation at the rs12948783 genetic locus—as
+well as phenotypic variables such as sex and country of
 origin—influences normalized pain relief among European cancer patients
 treated with opioid medications. Using a simulated dataset modeled on
 the findings of Galvan et al. (2011), we conducted linear modeling and
 graphical analyses to evaluate associations between genotype and pain
-outcomes. Our results show clear differences in mean pain relief across
-genotypes and between minor-allele carriers and non-carriers, suggesting
-that genetic background may play a meaningful role in modulating opioid
-response. These findings support the growing movement toward
-personalized, genotype-informed pain management for cancer patients.
+outcomes as well as differences in sex as well as country of origin. Our
+results show statistically significant differences between different
+genotypes, suggesting that genetic background may play a meaningful role
+in modulating opioid response. However, we found no statistical
+significance in differences between sex or country of origin. These
+findings support the growing movement toward personalized,
+genotype-informed pain management for cancer patients.
 
 # BACKGROUND
 
@@ -41,26 +47,22 @@ influence both opioid metabolism and receptor function. Recent
 pharmacogenetic studies have emphasized the role of single nucleotide
 polymorphisms (SNPs) in genes associated with opioid signaling pathways
 in determining the efficacy and dosage requirements of pain treatment.
-One influential study by Galvan et al. (2011) identified multiple
-genetic loci that modulate opioid therapy response in cancer patients
-across Europe. Their findings indicated that variants such as rs12948783
-were significantly associated with differences in pain relief and opioid
-dose requirements, suggesting that specific genetic profiles can affect
-a patient’s analgesic sensitivity. These results highlight the
-importance of integrating genetic screening into clinical pain
+One influential study by Galvan et al. (2011) was conducted by the
+European Pharmacogenetic Opioid Study (EPOS). This study identified
+multiple genetic loci that modulate opioid therapy response in cancer
+patients across Europe. Their findings indicated that variants such as
+rs12948783 were significantly associated with differences in pain relief
+and opioid dose requirements, suggesting that specific genetic profiles
+can affect a patient’s analgesic sensitivity. These results highlight
+the importance of integrating genetic screening into clinical pain
 management to optimize therapeutic outcomes and minimize adverse
 effects. Based on this evidence, the present study seeks to investigate
 how genetic and phenotypic factors influence pain management outcomes
-among European cancer patients treated with opioids. Specifically, we
-hypothesize that genetic variation at the rs12948783 locus, along with
-phenotypic variables such as sex and country, significantly affect
-normalized pain relief. We predict that carriers of the minor allele (AG
-or GG genotypes) will experience greater pain relief compared to AA
-homozygotes, reflecting enhanced opioid responsiveness. Understanding
-these genetic and demographic determinants of opioid efficacy may
-provide valuable insights for the development of personalized pain
-management strategies, ultimately improving quality of life for cancer
-patients undergoing treatment. \# STUDY QUESTION and HYPOTHESIS
+among European cancer patients treated with opioids. Understanding these
+genetic and demographic determinants of opioid efficacy may provide
+valuable insights for the development of personalized pain management
+strategies, ultimately improving quality of life for cancer patients
+undergoing treatment. \# STUDY QUESTION and HYPOTHESIS
 
 ## Questions
 
@@ -69,21 +71,32 @@ European cancer patients who have been treated with opioids?
 
 ## Hypothesis
 
-Genetic variation in opioid receptor-related genes significantly affect
-pain relief and opioid requirements. \## Prediction I predict that there
-will be certain phenotypes and genetics that correspond to lesser pain
-responses depending on the unique genetic makeup of each demographic.
+Genetic variation in genetic locus rs12948783 significantly affect pain
+relief and opioid requirements.
+
+## Prediction
+
+There will be certain phenotypes and genetics that correspond to greater
+normalized pain relief with opioid therapy.
 
 # METHODS
 
-This study analyzed a simulated dataset modeled after the
-pharmacogenomic structure reported in Galvan et al. (2011). Data
-included genotype at rs12948783, carrier status of the minor allele,
-normalized pain relief, sex, and country of origin. After importing the
-dataset into R, boxplots were created to visualize pain relief
-differences across genotypes, while barplots summarized mean ± standard
-error pain relief values by genotype and carrier status. All analyses
-were performed using readr, dplyr, and ggplot2 (Wickham et al., 2019).
+Due to privacy laws, the actual data from the study was not able to be
+obtained. However, we were able to simulate data that provided
+information in line with the findings reported in Galvan et al. (2011).
+Data included genotype at rs12948783, carrier status of the minor
+allele, normalized pain relief, sex, and country of origin. After
+importing the dataset into R, boxplots were created to visualize pain
+relief differences across genotypes, while barplots summarized mean ±
+standard error pain relief values by genotype and carrier status.
+
+In Figure 1, a boxplot was generated to visualize the differences in
+normalized pain response with respect to the three different genotypes
+that were observed in the study. In Figure 2, a barplot was utilized to
+show the difference between the means with standard error between the
+different genotypes. To assess the relationship between the factors
+genotype, sex, and country, a linear regression model was utilized to
+determine the statistical significance of the variables.
 
 ``` r
 library(readr)
@@ -216,72 +229,85 @@ print(p)
 
 # DISCUSSION
 
-The present study demonstrates that genetic variation at rs12948783,
-combined with demographic factors, influences normalized pain relief in
-a simulated European cancer cohort. These findings align with earlier
-empirical results showing that SNPs in opioid-related genes
-significantly impact analgesic outcomes (Galvan et al., 2011). Both the
-boxplots and barplots indicate substantial differences in pain relief
-across genotypes and carrier groups, with minor-allele carriers
-generally exhibiting enhanced opioid responsiveness. These results are
-consistent with prior observations that certain alleles increase opioid
-receptor sensitivity or alter downstream signaling pathways (Baldwin et
-al., 2012). Overall, these results reinforce the idea that
+The present study demonstrates that genetic variation at rs12948783
+influences normalized pain relief. These findings align with Galvan et
+al., 2011 results showing that SNPs in opioid-related genes
+significantly impact analgesic outcomes. Both the boxplots and barplots
+indicate substantial differences in pain relief across genotypes and
+carrier groups, with G-allele carriers generally exhibiting enhanced
+opioid responsiveness, especially those who were homozygous for the G
+allele. These results are consistent with prior observations that
+certain alleles increase opioid receptor sensitivity or alter downstream
+signaling pathways (Klepstad et al., 2011). We can also see that factors
+like sex and country of origin have no statistical significance on
+opioid responsiveness. Overall, these results reinforce the idea that
 pharmacogenomic screening may be a valuable tool in optimizing opioid
 prescribing and improving cancer pain management.
 
 ## Interpretation of boxplot
 
-The boxplot revealed clear differences in the distribution of normalized
-pain relief between rs12948783 genotypes. Several genotypes demonstrated
-higher median pain relief, while others exhibited more variability,
-indicating inconsistent or reduced opioid response. The presence of
-overlapping yet distinct distributions supports the hypothesis that
-genotype contributes to inter-individual differences in opioid
-analgesia, consistent with trends reported by Galvan et al. (2011).
+The boxplot reveals clear differences in the distribution of normalized
+pain relief between rs12948783 genotypes. Those who had the G-allele
+present at the rs12948783 locus were overall more receptive to opioids
+and reported higher levels of normalized pain relief. Furthermore, those
+who were homozygous for the G-allele experienced the highest levels of
+normalized pain relief. This is consistent with the findings of Galvan
+et al., 2011.
+
+## Interpretation of the linear model
+
+The linear model shows the significance of different factors. The model
+shows very high statistical significance (p-value = 2e-16) of
+differences in genotype having an effect on noramlized pain relief from
+opioids. However, phenotypic factors like sex and country of origin were
+shown to have no statistical significance.
 
 ## Interpretation of the barplot
 
-The barplot showed that minor-allele carriers consistently exhibited
-higher mean normalized pain relief than non-carriers across nearly all
-genotypes. Standard error bars were relatively small, and sample sizes
-(n-values) were large, indicating reliable mean estimates. This pattern
-mirrors patterns seen in real pharmacogenomic cohorts, where
-minor-allele carriers often experience enhanced opioid sensitivity
-(Klepstad et al., 2011). These visual findings suggest that the minor
-allele at rs12948783 may confer increased analgesic responsiveness.
+The barplot shows that G-allele carriers consistently exhibited higher
+mean normalized pain relief across all genotypes. Standard error bars
+were relatively small, and sample sizes (n-values) were large,
+indicating reliable mean estimates. This pattern mirrors patterns seen
+in real pharmacogenomic studies, where G-allele carriers often
+experience enhanced opioid sensitivity (Klepstad et al., 2011).
 
 # CONCLUSION
 
-This study supports the hypothesis that genetic and phenotypic factors
-influence opioid treatment outcomes among European cancer patients.
-Variation at the rs12948783 locus appears to be meaningfully associated
-with pain relief, with minor-allele carriers showing superior analgesic
-response. Sex and country of origin also contributed to pain relief
-variability. Together, these findings highlight the potential clinical
-value of incorporating genetic information into pain management
-strategies and underscore the need for continued research in
-personalized opioid therapy.
+This study supports the hypothesis that genetic factors influence opioid
+treatment outcomes among European cancer patients. However, phenotypic
+differences like sex and country of origin were not shown to have any
+significant effect on normalized pain relief. Variation at the
+rs12948783 locus appears to be meaningfully associated with pain relief,
+with G-allele carriers showing superior analgesic response. Together,
+these findings highlight the potential clinical value of incorporating
+genetic information into pain management strategies and underscore the
+need for continued research in personalized opioid therapy.
+
+## Limitations
+
+It is important to note that the data we utilized was simulated to match
+outcomes of previous studies. It would be beneficial to conduct a new
+study to obtain data, or obtain and utilize the data from the initial
+study (Galvan et al., 2011).
+
+This study also only focuses on European cancer patients. In order to
+determine if country of origin is truly insignificant, it would be
+important to gather data from other parts of the world and reevaluate
+its significance in normalized pain relief.
 
 # REFERENCES
-
-Baldwin, R. M., Ohlsson, S., Pedersen, R. S., et al. (2012). Increased
-morphine clearance in women: A population pharmacokinetic study. British
-Journal of Clinical Pharmacology, 74(3), 459–468.
 
 Galvan, A., Skorpen, F., Klepstad, P., Fragoso, M., Ando, M., Nilsen,
 T., … & Ciotti, P. (2011). Multiple loci modulate opioid therapy
 response for cancer pain. Clinical Cancer Research, 17(13), 4581–4587.
-<https://doi.org/10.1158/1078-0432.CCR-10-3407>
+<https://aacrjournals.org/clincancerres/article/17/13/4581/11924/Multiple-Loci-Modulate-Opioid-Therapy-Response-for>
 
 Klepstad, P., Fladvad, T., Skorpen, F., et al. (2011). Influence of
 genetic variability on opioid use for cancer pain: A European genetic
 association study of 2294 cancer pain patients. Pain, 152(5), 1139–1145.
 R Core Team. (2024). R: A language and environment for statistical
-computing. R Foundation for Statistical Computing.
-
-Wickham, H., Averick, M., Bryan, J., et al. (2019). Welcome to the
-tidyverse. Journal of Open Source Software, 4(43), 1686.
+computing. R Foundation for Statistical
+Computing.https://pubmed.ncbi.nlm.nih.gov/21398039/
 
 ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-such as plot() and to correct syntax errors. Accessed 2025-11-22.
+such as plot() and to correct syntax errors. Accessed 2025-12-06.
